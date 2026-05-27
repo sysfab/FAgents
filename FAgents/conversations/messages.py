@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from typing import TypedDict, Literal, Union
+from typing import TypedDict, Literal, Union, cast
 
 
 type TextType = Literal["text"]
@@ -14,10 +14,13 @@ class TextDict(TypedDict):
 @dataclass
 class Text:
     text: str
-    type: TextType = "text"
 
     def to_dict(self) -> TextDict:
-        return {"text": self.text, "type": self.type}
+        return {"text": self.text, "type": "text"}
+
+    @classmethod
+    def from_dict(cls, t_dict: TextDict) -> Text:
+        return cls(text=t_dict["text"])
 
 
 type ImageFormat = Literal["png", "jpg", "webp"]
@@ -34,10 +37,13 @@ class ImageDict(TypedDict):
 class Image:
     data: str
     format: ImageFormat
-    type: ImageType = "image"
 
     def to_dict(self) -> ImageDict:
-        return {"data": self.data, "format": self.format, "type": self.type}
+        return {"data": self.data, "format": self.format, "type": "image"}
+
+    @classmethod
+    def from_dict(cls, i_dict: ImageDict) -> Image:
+        return cls(data=i_dict["data"], format=i_dict["format"])
 
 
 type MessageRole = Literal["system", "user", "assistant"]
@@ -61,6 +67,21 @@ class Message:
         else:
             content = [element.to_dict() for element in self.content]
         return {"role": self.role, "content": content}
+
+    @classmethod
+    def from_dict(cls, m_dict: MessageDict) -> Message:
+        if isinstance(m_dict["content"], list):
+            content = []
+            for content_dict in m_dict["content"]:
+                match content_dict["type"]:
+                    case "text":
+                        content.append(Text.from_dict(cast(TextDict, content_dict)))
+                    case "image":
+                        content.append(Image.from_dict(content_dict))
+
+            return cls(role=m_dict["role"], content=content)
+        else:
+            return cls(role=m_dict["role"], content=m_dict["content"])
 
 
 def System(content: MessageContent) -> Message:
