@@ -14,6 +14,10 @@ __all__ = [
     "MessageContent",
     "MessageDict",
     "Message",
+    "TextDict",
+    "Text",
+    "ImageDict",
+    "Image"
     "System",
     "User",
     "Assistant",
