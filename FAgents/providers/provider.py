@@ -1,6 +1,11 @@
 from abc import ABC, abstractmethod
 
-from FAgents.conversations import Conversation
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from FAgents.agents import Agent
+    from FAgents.conversations import Conversation
 
 
 class Runner(ABC):
@@ -10,4 +15,4 @@ class Runner(ABC):
 
 class Provider(ABC):
     @abstractmethod
-    def Runner(self, agent) -> Runner: ...
+    def GetRunner(self, agent: type[Agent]) -> Runner: ...

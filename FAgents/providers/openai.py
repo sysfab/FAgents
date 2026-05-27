@@ -1,28 +1,36 @@
-from .provider import Provider, Runner
+from .provider import Runner, Provider
+
+from FAgents.agents import Agent
 
 from openai import AsyncOpenAI
 from openai.types.shared import Reasoning
 
 from agents import (
-    Agent,
     ModelSettings,
     OpenAIProvider,
     RunConfig,
-    Runner,
     set_default_openai_key,
 )
+from agents import Agent as AgentsAgent
+from agents import Runner as AgentsRunner
+
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from FAgents.conversations import Conversation
 
 
 class OpenAIRunner(Runner):
-    def __init__(self, provider, agent):
-        self.provider = provider
-        self.agent = agent
+    def __init__(self, provider: OpenAI, agent: type[Agent]):
+        self.provider: OpenAI = provider
+        self.agent: type[Agent] = agent
 
-    async def Run(self, conversation, tools=None):
+    async def Run(self, conversation: Conversation, tools=None):
         tools = tools or list()
 
-        return await Runner.run(
-            Agent(
+        return await AgentsRunner.run(
+            AgentsAgent(
                 name=self.agent.Name,
                 instructions=self.agent.Instructions,
                 tools=tools,
@@ -32,7 +40,7 @@ class OpenAIRunner(Runner):
                     verbosity=self.agent.Verbosity,
                 ),
             ),
-            conversation.to_dict(),
+            input=conversation.to_dicts(),
             run_config=RunConfig(model_provider=self.provider.openai_provider),
         )
 
@@ -58,5 +66,5 @@ class OpenAI(Provider):
             },
         )
 
-    def Runner(self, agent):
+    def GetRunner(self, agent: type[Agent]):
         return OpenAIRunner(self, agent)

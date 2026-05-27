@@ -3,4 +3,4 @@ from .frontend import Frontend
 
 from .discord import Discord
 
-__all__ = ["Serve", "ServeAsyncFrontend", "Discord"]
+__all__ = ["Serve", "ServeAsync", "Frontend", "Discord"]

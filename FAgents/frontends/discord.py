@@ -1,10 +1,16 @@
 from .frontend import Frontend
 
 
-class Discord(Frontend):
-    def __init__(self, runner, token: str):
-        self.runner = runner
-        self.token = token
+from typing import TYPE_CHECKING
 
-    async def Serve(self):
+if TYPE_CHECKING:
+    from FAgents.providers import Runner
+
+
+class Discord(Frontend):
+    def __init__(self, runner: Runner, token: str):
+        self.runner: Runner = runner
+        self.token: str = token
+
+    async def Serve(self) -> None:
         pass

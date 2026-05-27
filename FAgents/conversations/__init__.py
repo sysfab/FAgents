@@ -1,7 +1,18 @@
-from .messages import Message, System, User, Assistant
+from .messages import (
+    MessageRole,
+    MessageContent,
+    MessageDict,
+    Message,
+    System,
+    User,
+    Assistant,
+)
 from .conversation import Conversation
 
 __all__ = [
+    "MessageRole",
+    "MessageContent",
+    "MessageDict",
     "Message",
     "System",
     "User",

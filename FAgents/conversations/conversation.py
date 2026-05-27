@@ -1,11 +1,14 @@
-from .messages import Message
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .messages import Message, MessageRole, MessageDict
 
 
 class Conversation:
     def __init__(self, *messages: Message):
         self.messages: list[Message] = list(messages)
 
-    def get_from(self, role: str) -> list[Message]:
+    def get_from(self, role: MessageRole) -> list[Message]:
         return [message for message in self.messages if message.role == role]
 
     def add(self, *messages: Message) -> None:
@@ -14,7 +17,7 @@ class Conversation:
     def clear(self) -> None:
         self.messages.clear()
 
-    def to_dicts(self) -> list:
+    def to_dicts(self) -> list[MessageDict]:
         return [message.to_dict() for message in self.messages]
 
     def __len__(self) -> int:
