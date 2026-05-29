@@ -17,8 +17,7 @@ __all__ = [
     "TextDict",
     "Text",
     "ImageDict",
-    "Image"
-    "System",
+    "ImageSystem",
     "User",
     "Assistant",
     "Conversation",

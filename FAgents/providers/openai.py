@@ -18,6 +18,7 @@ from agents import Runner as AgentsRunner
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Callable
     from FAgents.conversations import Conversation
 
 
@@ -26,7 +27,9 @@ class OpenAIRunner(Runner):
         self.provider: OpenAI = provider
         self.agent: type[Agent] = agent
 
-    async def Run(self, conversation: Conversation, tools=None):
+    async def Run(
+        self, conversation: Conversation, tools: None | list[Callable] = None
+    ):
         tools = tools or list()
 
         return await AgentsRunner.run(
@@ -66,5 +69,5 @@ class OpenAI(Provider):
             },
         )
 
-    def GetRunner(self, agent: type[Agent]):
+    def GetRunner(self, agent: type[Agent]) -> OpenAIRunner:
         return OpenAIRunner(self, agent)
