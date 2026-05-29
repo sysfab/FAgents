@@ -145,31 +145,31 @@ System = _RoleMessage("system")
 Developer = _RoleMessage("developer")
 
 
-class ToolCallDict(TypedDict):
+class ToolCallDict(TypedDict, total=False):
     type: Literal["tool_call"]
     arguments: str
     name: str
-    id: str
-    call_id: str
     status: str
+    id: str
+    call_id: str | None
 
 
 @dataclass
 class ToolCall:
     arguments: str
     name: str
-    id: str
-    call_id: str
     status: str
+    id: str
+    call_id: str | None
 
     def to_dict(self) -> ToolCallDict:
         return {
             "type": "tool_call",
             "arguments": self.arguments,
             "name": self.name,
+            "status": self.status,
             "id": self.id,
             "call_id": self.call_id,
-            "status": self.status,
         }
 
     @classmethod
@@ -177,35 +177,35 @@ class ToolCall:
         return cls(
             arguments=tc_dict["arguments"],
             name=tc_dict["name"],
-            id=tc_dict["id"],
-            call_id=tc_dict["call_id"],
             status=tc_dict["status"],
+            id=tc_dict["id"],
+            call_id=tc_dict.get("call_id"),
         )
 
 
 class ToolCallOutputDict(TypedDict):
     type: Literal["tool_call_output"]
-    call_id: str
     output: str
+    call_id: str | None
 
 
 @dataclass
 class ToolCallOutput:
-    call_id: str
     output: str
+    call_id: str | None
 
     def to_dict(self) -> ToolCallOutputDict:
         return {
             "type": "tool_call_output",
-            "call_id": self.call_id,
             "output": self.output,
+            "call_id": self.call_id,
         }
 
     @classmethod
     def from_dict(cls, tco_dict: ToolCallOutputDict) -> ToolCallOutput:
         return cls(
-            call_id=tco_dict["call_id"],
             output=tco_dict["output"],
+            call_id=tco_dict["call_id"],
         )
 
 
