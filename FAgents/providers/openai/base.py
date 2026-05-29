@@ -13,7 +13,7 @@ from agents import (
 from agents import Agent as AgentsAgent
 from agents import Runner as AgentsRunner
 
-from .utils import to_openai_tool
+from .utils import to_openai_tool, to_openai_input
 
 
 from typing import TYPE_CHECKING
@@ -46,7 +46,7 @@ class OpenAIRunner(Runner):
                     verbosity=self.agent.Verbosity,
                 ),
             ),
-            input=conversation.to_dicts(),
+            input=to_openai_input(conversation),
             run_config=RunConfig(model_provider=self.provider.openai_provider),
         )
 

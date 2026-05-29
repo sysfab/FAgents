@@ -1,14 +1,22 @@
 import inspect
 import json
+from agents import TResponseInputItem
 from agents.tool import FunctionTool
 from agents.tool_context import ToolContext
+from openai.types.responses import EasyInputMessageParam
+from openai.types.responses.response_input_param import ResponseInputParam
+from openai.types.responses.response_input_text_param import ResponseInputTextParam
+from openai.types.responses.response_input_image_param import ResponseInputImageParam
+from openai.types.responses.response_input_file_param import ResponseInputFileParam
 
+from FAgents.conversations import Text, Image, File
 
 from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from typing import Any
     from FAgents.agents import Tool
+    from FAgents.conversations import Conversation, Message
 
 
 def to_openai_tool(tool: Tool[Any, Any]) -> FunctionTool:
@@ -36,6 +44,49 @@ def to_openai_tool(tool: Tool[Any, Any]) -> FunctionTool:
         },
         on_invoke_tool=on_invoke,
     )
+
+
+def _text_to_openai(text: "Text") -> ResponseInputTextParam:
+    return {"type": "input_text", "text": text.text}
+
+
+def _image_to_openai(image: "Image") -> ResponseInputImageParam:
+    return {
+        "type": "input_image",
+        "detail": image.detail or "auto",
+        "image_url": image.url,
+    }
+
+
+def _file_to_openai(file: "File") -> ResponseInputFileParam:
+    result: ResponseInputFileParam = {"type": "input_file"}
+    if file.id is not None:
+        result["file_id"] = file.id
+    if file.url is not None:
+        result["file_url"] = file.url
+    if file.data is not None:
+        result["file_data"] = file.data
+    if file.filename is not None:
+        result["filename"] = file.filename
+    if file.detail is not None:
+        result["detail"] = file.detail
+    return result
+
+
+def to_openai_message(message: "Message") -> EasyInputMessageParam:
+    content = [
+        _text_to_openai(item)
+        if isinstance(item, Text)
+        else _file_to_openai(item)
+        if isinstance(item, File)
+        else _image_to_openai(item)
+        for item in message.content
+    ]
+    return {"role": message.role, "content": content, "type": "message"}
+
+
+def to_openai_input(conversation: "Conversation") -> ResponseInputParam:
+    return [to_openai_message(message) for message in conversation]
 
 
 def _python_type_to_json(ann: Any) -> str:
