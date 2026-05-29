@@ -13,6 +13,8 @@ from agents import (
 from agents import Agent as AgentsAgent
 from agents import Runner as AgentsRunner
 
+from .utils import to_openai_tool
+
 
 from typing import TYPE_CHECKING
 
@@ -31,12 +33,13 @@ class OpenAIRunner(Runner):
         self, conversation: Conversation, tools: None | list[Tool[Any, Any]] = None
     ):
         tools = tools or list()
+        tools.extend(self.agent.Tools)
 
         return await AgentsRunner.run(
             AgentsAgent(
                 name=self.agent.Name,
                 instructions=self.agent.Instructions,
-                tools=tools,
+                tools=[to_openai_tool(tool) for tool in tools],
                 model=self.provider.model,
                 model_settings=ModelSettings(
                     reasoning=Reasoning(effort=self.agent.Reasoning),
