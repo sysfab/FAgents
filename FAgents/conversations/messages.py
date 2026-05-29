@@ -27,44 +27,53 @@ class ImageDict(TypedDict):
     type: Literal["image"]
     url: str
     format: ImageFormat
+    detail: Literal["low", "high"] | None
 
 
 @dataclass
 class Image:
     url: str
     format: ImageFormat
+    detail: Literal["low", "high"] | None = None
 
     def to_dict(self) -> ImageDict:
-        return {"url": self.url, "format": self.format, "type": "image"}
+        return {
+            "type": "image",
+            "url": self.url,
+            "format": self.format,
+            "detail": self.detail,
+        }
 
     @classmethod
     def from_dict(cls, i_dict: ImageDict) -> Image:
-        return cls(url=i_dict["url"], format=i_dict["format"])
+        return cls(
+            url=i_dict["url"], format=i_dict.get("format"), detail=i_dict.get("detail")
+        )
 
 
-class FileDict(TypedDict):
-    type: Literal["input_file"]
-    file_id: str | None
-    file_url: str | None
-    file_data: str | None
+class FileDict(TypedDict, total=False):
+    type: Literal["file"]
+    detail: Literal["low", "high"]
+    url: str | None
+    id: str | None
+    data: str | None
     filename: str | None
-    detail: Literal["low", "high"] | None
 
 
 @dataclass
 class File:
-    file_id: str | None = None
-    file_url: str | None = None
-    file_data: str | None = None
+    detail: Literal["low", "high"]
+    id: str | None = None
+    url: str | None = None
+    data: str | None = None
     filename: str | None = None
-    detail: Literal["low", "high"] | None = None
 
     def to_dict(self) -> FileDict:
         return {
-            "type": "input_file",
-            "file_id": self.file_id,
-            "file_url": self.file_url,
-            "file_data": self.file_data,
+            "type": "file",
+            "id": self.id,
+            "url": self.url,
+            "data": self.data,
             "filename": self.filename,
             "detail": self.detail,
         }
@@ -72,11 +81,11 @@ class File:
     @classmethod
     def from_dict(cls, f_dict: FileDict) -> File:
         return cls(
-            file_id=f_dict.get("file_id"),
-            file_url=f_dict.get("file_url"),
-            file_data=f_dict.get("file_data"),
+            detail=f_dict["detail"],
+            id=f_dict.get("id"),
+            url=f_dict.get("url"),
+            data=f_dict.get("data"),
             filename=f_dict.get("filename"),
-            detail=f_dict.get("detail"),
         )
 
 
