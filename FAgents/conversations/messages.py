@@ -123,19 +123,21 @@ class Message:
         return cls(role=m_dict["role"], content=content)
 
 
-def System(content: MessageContent | str) -> Message:
-    if isinstance(content, str):
-        return Message("user", [Text(content)])
-    return Message("system", content)
+def _RoleMessage(role: MessageRole):
+    def _message(*content: MessageContent | str) -> Message:
+        parts: MessageContent = []
+        for c in content:
+            if isinstance(c, str):
+                parts.append(Text(c))
+            elif isinstance(c, list):
+                parts.extend(c)
+            else:
+                parts.append(c)
+        return Message(role, parts)
+
+    return _message
 
 
-def User(content: MessageContent | str) -> Message:
-    if isinstance(content, str):
-        return Message("user", [Text(content)])
-    return Message("user", content)
-
-
-def Assistant(content: MessageContent | str) -> Message:
-    if isinstance(content, str):
-        return Message("user", [Text(content)])
-    return Message("assistant", content)
+System = _RoleMessage("system")
+User = _RoleMessage("user")
+Assistant = _RoleMessage("assistant")
