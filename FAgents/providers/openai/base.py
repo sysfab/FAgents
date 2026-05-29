@@ -1,5 +1,5 @@
+from FAgents import Message, Messages, MessagesItem, Agent
 from FAgents.providers import Runner, RunResult, Provider
-from FAgents.agents import Agent
 
 from openai import AsyncOpenAI
 from openai.types.shared import Reasoning
@@ -8,19 +8,29 @@ from agents import (
     ModelSettings,
     OpenAIProvider,
     RunConfig,
+    MessageOutputItem,
+    ToolCallItem,
+    ToolCallOutputItem,
     set_default_openai_key,
 )
+
 from agents import Agent as AgentsAgent
 from agents import Runner as AgentsRunner
 
-from .utils import to_openai_tool, to_openai_input
+from .utils import (
+    to_openai_tool,
+    to_openai_input,
+    openai_to_message,
+    openai_to_tool_call,
+    openai_to_tool_call_output,
+)
 
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     from typing import Any, Callable
-    from FAgents import Messages, tool
+    from FAgents import tool
 
 
 class OpenAIRunner(Runner):
@@ -32,7 +42,7 @@ class OpenAIRunner(Runner):
         tools = tools or list()
         tools.extend(self.agent.Tools)
 
-        return await AgentsRunner.run(
+        result = await AgentsRunner.run(
             AgentsAgent(
                 name=self.agent.Name,
                 instructions=self.agent.Instructions,
@@ -45,6 +55,30 @@ class OpenAIRunner(Runner):
             ),
             input=to_openai_input(messages),
             run_config=RunConfig(model_provider=self.provider.openai_provider),
+        )
+
+        new_messages = Messages()
+        for message in result.new_items:
+            new_message = None
+
+            if message.type == "message_output_item":
+                new_message = openai_to_message(cast(MessageOutputItem, message))
+            elif message.type == "tool_call_item":
+                new_message = openai_to_tool_call(cast(ToolCallItem, message))
+            elif message.type == "tool_call_output_item":
+                new_message = openai_to_tool_call_output(
+                    cast(ToolCallOutputItem, message)
+                )
+
+            if new_message != None:
+                new_messages.add(new_message)
+
+        message = cast(Message, new_messages[-1])
+
+        return RunResult(
+            Message=message,
+            NewMessages=new_messages,
+            ProviderSpecific=result,
         )
 
 

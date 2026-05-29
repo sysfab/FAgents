@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from typing import TypedDict, Literal, Union, cast
+from typing import TypedDict, Literal, Union, cast, Any
 
 
 class TextDict(TypedDict):
@@ -26,15 +26,15 @@ type ImageFormat = Literal["png", "jpg", "webp"]
 class ImageDict(TypedDict):
     type: Literal["image"]
     url: str
-    format: ImageFormat
-    detail: Literal["low", "high"] | None
+    format: ImageFormat | None
+    detail: Literal["low", "high", "auto", "original"] | None
 
 
 @dataclass
 class Image:
     url: str
-    format: ImageFormat
-    detail: Literal["low", "high"] | None = None
+    format: ImageFormat | None = None
+    detail: Literal["low", "high", "auto", "original"] | None = None
 
     def to_dict(self) -> ImageDict:
         return {
@@ -185,13 +185,13 @@ class ToolCall:
 
 class ToolCallOutputDict(TypedDict):
     type: Literal["tool_call_output"]
-    output: str
+    output: Any
     call_id: str | None
 
 
 @dataclass
 class ToolCallOutput:
-    output: str
+    output: Any
     call_id: str | None
 
     def to_dict(self) -> ToolCallOutputDict:

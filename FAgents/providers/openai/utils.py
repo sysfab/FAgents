@@ -1,20 +1,26 @@
 import inspect
 import json
-from agents import TResponseInputItem
+from agents import (
+    TResponseInputItem,
+    RunItem,
+    MessageOutputItem,
+    ToolCallItem,
+    ToolCallOutputItem,
+)
 from agents.tool import FunctionTool
 from agents.tool_context import ToolContext
-from openai.types.responses import EasyInputMessageParam
+from openai.types.responses.easy_input_message_param import EasyInputMessageParam
 from openai.types.responses.response_input_param import ResponseInputParam
 from openai.types.responses.response_input_text_param import ResponseInputTextParam
 from openai.types.responses.response_input_image_param import ResponseInputImageParam
 from openai.types.responses.response_input_file_param import ResponseInputFileParam
 
-from FAgents import Text, Image, File
+from FAgents import Message, ToolCall, ToolCallOutput, Text, Image, File
 
-from typing import TYPE_CHECKING, Union, Any
+from typing import TYPE_CHECKING, Union, Any, cast
 
 if TYPE_CHECKING:
-    from FAgents import Message, Messages, tool
+    from FAgents import Messages, MessagesItem, tool
 
 
 def to_openai_tool(tool: tool[Any, Any]) -> FunctionTool:
@@ -75,7 +81,7 @@ def _file_to_openai(file: File) -> ResponseInputFileParam:
     return result
 
 
-def to_openai_message(message: Message) -> EasyInputMessageParam:
+def to_openai_message(message: Message) -> TResponseInputItem:
     content = [
         _text_to_openai(item)
         if isinstance(item, Text)
@@ -87,8 +93,65 @@ def to_openai_message(message: Message) -> EasyInputMessageParam:
     return {"role": message.role, "content": content, "type": "message"}
 
 
+def _openai_to_text(text: ResponseInputTextParam) -> Text:
+    return Text(text=text["text"])
+
+
+def _openai_to_image(image: ResponseInputImageParam) -> Image:
+    return Image(
+        detail=image.get("detail"),
+        url=cast(str, image.get("image_url")),
+    )
+
+
+def _openai_to_file(file: ResponseInputFileParam) -> File:
+    return File(
+        id=file.get("file_id"),
+        url=file.get("file_url"),
+        data=file.get("file_data"),
+        filename=file.get("filename"),
+        detail=file.get("detail") or "low",
+    )
+
+
 def to_openai_input(messages: Messages) -> ResponseInputParam:
     return [to_openai_message(message) for message in messages]
+
+
+def openai_to_message(message: MessageOutputItem) -> Message:
+    item = cast(EasyInputMessageParam, message.to_input_item())
+
+    content = []
+    for content_item in cast(list[dict[str, Any]], item["content"]):
+        if content_item["type"] == "output_text":
+            content.append(_openai_to_text(cast(ResponseInputTextParam, content_item)))
+        elif content_item["type"] == "output_image":
+            content.append(
+                _openai_to_image(cast(ResponseInputImageParam, content_item))
+            )
+        elif content_item["type"] == "output_file":
+            content.append(_openai_to_file(cast(ResponseInputFileParam, content_item)))
+
+    return Message(role=item["role"], content=content)
+
+
+def openai_to_tool_call(tool_call: ToolCallItem) -> ToolCall:
+    item = tool_call.to_input_item()
+    return ToolCall(
+        arguments=cast(str, item.get("arguments")),
+        name=cast(str, item.get("name")),
+        id=cast(str, item.get("id")),
+        call_id=item.get("call_id"),
+        status=cast(str, item.get("status")),
+    )
+
+
+def openai_to_tool_call_output(tool_call_output: ToolCallOutputItem) -> ToolCallOutput:
+    item = tool_call_output.to_input_item()
+    return ToolCallOutput(
+        output=item.get("output"),
+        call_id=item.get("call_id"),
+    )
 
 
 def _python_type_to_json(ann: Any) -> str:

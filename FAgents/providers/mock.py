@@ -16,7 +16,10 @@ class MockRunner(Runner):
     async def run(
         self, messages: Messages, tools: None | list[tool[Any, Any]] = None
     ) -> RunResult:
-        return RunResult(Message=Assistant("Hello world!"))
+        return RunResult(
+            NewMessages=Messages(Assistant("Hello world!")),
+            Message=Assistant("Hello world!"),
+        )
 
 
 class Mock(Provider):

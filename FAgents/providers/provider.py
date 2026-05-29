@@ -12,8 +12,11 @@ if TYPE_CHECKING:
 @dataclass
 class RunResult:
     Message: Message
-    Exception: Exception | None = None
+    NewMessages: Messages
     ProviderSpecific: Any = None
+
+    def __repr__(self):
+        return f"RunResult(Message={self.Message},NewMessages={self.NewMessages},ProviderSpecific={self.ProviderSpecific})"
 
 
 class Runner(ABC):
