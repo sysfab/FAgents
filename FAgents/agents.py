@@ -60,7 +60,3 @@ class Tool[**P, R]:
 
     def __repr__(self) -> str:
         return f"Tool(name={self.Name!r}, sig={self.Signature})"
-
-
-def tool[**P, R](func: NamedCallable[P, R]) -> Tool[P, R]:
-    return Tool(func)
