@@ -89,7 +89,7 @@ class File:
         )
 
 
-type MessageRole = Literal["system", "user", "assistant"]
+type MessageRole = Literal["user", "assistant", "system", "developer"]
 type MessageContent = list[Text | Image | File]
 type MessageDictContent = list[TextDict | ImageDict | FileDict]
 
@@ -139,9 +139,10 @@ def _RoleMessage(role: MessageRole):
     return _message
 
 
-System = _RoleMessage("system")
 User = _RoleMessage("user")
 Assistant = _RoleMessage("assistant")
+System = _RoleMessage("system")
+Developer = _RoleMessage("developer")
 
 
 class ToolCallDict(TypedDict):
