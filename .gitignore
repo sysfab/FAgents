@@ -6,7 +6,5 @@ dist/
 wheels/
 *.egg-info
 
-tokens.py
-
 # Virtual environments
 .venv
