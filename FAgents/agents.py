@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from functools import wraps
 import inspect
 
-from typing import TYPE_CHECKING, overload
+from typing import TYPE_CHECKING, overload, Protocol
 
 if TYPE_CHECKING:
     from typing import Literal, Callable, ClassVar, Any
@@ -26,9 +26,6 @@ class Agent:
     @classmethod
     def runner(cls, provider: Provider) -> Runner:
         return provider.runner(cls)
-
-
-from typing import Protocol
 
 
 class NamedCallable[**P, R](Protocol):
