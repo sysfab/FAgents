@@ -24,8 +24,8 @@ class Agent:
         cls.Tools = [value for value in vars(cls).values() if isinstance(value, Tool)]
 
     @classmethod
-    def GetRunner(cls, provider: "Provider") -> "Runner":
-        return provider.GetRunner(cls)
+    def runner(cls, provider: Provider) -> Runner:
+        return provider.runner(cls)
 
 
 from typing import Protocol

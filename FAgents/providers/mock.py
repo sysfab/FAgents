@@ -13,7 +13,7 @@ class MockRunner(Runner):
         self.provider: Mock = provider
         self.agent: type[Agent] = agent
 
-    async def Run(
+    async def run(
         self, messages: Messages, tools: None | list[Tool[Any, Any]] = None
     ) -> RunResult:
         return RunResult(Message=Assistant("Hello world!"))
@@ -23,5 +23,5 @@ class Mock(Provider):
     def __init__(self):
         pass
 
-    def GetRunner(self, agent: type[Agent]) -> MockRunner:
+    def runner(self, agent: type[Agent]) -> MockRunner:
         return MockRunner(self, agent)

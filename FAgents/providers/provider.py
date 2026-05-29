@@ -18,11 +18,11 @@ class RunResult:
 
 class Runner(ABC):
     @abstractmethod
-    async def Run(
+    async def run(
         self, messages: Messages, tools: None | list[Tool[Any, Any]] = None
     ) -> RunResult: ...
 
 
 class Provider(ABC):
     @abstractmethod
-    def GetRunner(self, agent: type[Agent]) -> Runner: ...
+    def runner(self, agent: type[Agent]) -> Runner: ...

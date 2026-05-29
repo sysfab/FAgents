@@ -28,7 +28,7 @@ class OpenAIRunner(Runner):
         self.provider: OpenAI = provider
         self.agent: type[Agent] = agent
 
-    async def Run(self, messages: Messages, tools: None | list[Tool[Any, Any]] = None):
+    async def run(self, messages: Messages, tools: None | list[Tool[Any, Any]] = None):
         tools = tools or list()
         tools.extend(self.agent.Tools)
 
@@ -69,5 +69,5 @@ class OpenAI(Provider):
             },
         )
 
-    def GetRunner(self, agent: type[Agent]) -> OpenAIRunner:
+    def runner(self, agent: type[Agent]) -> OpenAIRunner:
         return OpenAIRunner(self, agent)
