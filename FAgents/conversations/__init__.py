@@ -7,6 +7,8 @@ from .messages import (
     Text,
     ImageDict,
     Image,
+    FileDict,
+    File,
     System,
     User,
     Assistant,
@@ -22,7 +24,8 @@ __all__ = [
     "Text",
     "ImageDict",
     "Image",
-    "User",
+    "FileDict",
+    "FileUser",
     "Assistant",
     "Conversation",
 ]
