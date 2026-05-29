@@ -1,12 +1,12 @@
-from .provider import Runner, RunResult, Provider
-
+from FAgents.providers import Runner, RunResult, Provider
 from FAgents.agents import Agent
 from FAgents.conversations import Assistant
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Callable
+    from typing import Any, Callable
+    from FAgents.agents import Tool
     from FAgents.conversations import Conversation
 
 
@@ -16,7 +16,7 @@ class MockRunner(Runner):
         self.agent: type[Agent] = agent
 
     async def Run(
-        self, conversation: Conversation, tools: None | list[Callable] = None
+        self, conversation: Conversation, tools: None | list[Tool[Any, Any]] = None
     ):
         return RunResult(Message=Assistant("Hello world!"))
 
