@@ -1,7 +1,6 @@
-from .agents import Agent, Tool, tool
+from .agents import Agent, Tool
 
 __all__ = [
     "Agent",
     "Tool",
-    "tool",
 ]
