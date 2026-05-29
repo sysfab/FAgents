@@ -95,6 +95,7 @@ type MessageDictContent = list[TextDict | ImageDict | FileDict]
 
 
 class MessageDict(TypedDict):
+    type: Literal["message"]
     role: MessageRole
     content: MessageDictContent
 
@@ -106,7 +107,7 @@ class Message:
 
     def to_dict(self) -> MessageDict:
         content = [element.to_dict() for element in self.content]
-        return {"role": self.role, "content": content}
+        return {"type": "message", "role": self.role, "content": content}
 
     @classmethod
     def from_dict(cls, m_dict: MessageDict) -> Message:
@@ -143,14 +144,86 @@ User = _RoleMessage("user")
 Assistant = _RoleMessage("assistant")
 
 
+class ToolCallDict(TypedDict):
+    type: Literal["tool_call"]
+    arguments: str
+    name: str
+    id: str
+    call_id: str
+    status: str
+
+
+@dataclass
+class ToolCall:
+    arguments: str
+    name: str
+    id: str
+    call_id: str
+    status: str
+
+    def to_dict(self) -> ToolCallDict:
+        return {
+            "type": "tool_call",
+            "arguments": self.arguments,
+            "name": self.name,
+            "id": self.id,
+            "call_id": self.call_id,
+            "status": self.status,
+        }
+
+    @classmethod
+    def from_dict(cls, tc_dict: ToolCallDict) -> ToolCall:
+        return cls(
+            arguments=tc_dict["arguments"],
+            name=tc_dict["name"],
+            id=tc_dict["id"],
+            call_id=tc_dict["call_id"],
+            status=tc_dict["status"],
+        )
+
+
+class ToolCallOutputDict(TypedDict):
+    type: Literal["tool_call_output"]
+    call_id: str
+    output: str
+
+
+@dataclass
+class ToolCallOutput:
+    call_id: str
+    output: str
+
+    def to_dict(self) -> ToolCallOutputDict:
+        return {
+            "type": "tool_call_output",
+            "call_id": self.call_id,
+            "output": self.output,
+        }
+
+    @classmethod
+    def from_dict(cls, tco_dict: ToolCallOutputDict) -> ToolCallOutput:
+        return cls(
+            call_id=tco_dict["call_id"],
+            output=tco_dict["output"],
+        )
+
+
+type MessagesItem = Message | ToolCall | ToolCallOutput
+type MessagesDict = MessageDict | ToolCallDict | ToolCallOutputDict
+
+
 class Messages:
-    def __init__(self, *messages: Message):
-        self.messages: list[Message] = list(messages)
+    def __init__(self, *messages: MessagesItem):
+        self.messages: list[MessagesItem] = list(messages)
 
-    def get_from(self, role: MessageRole) -> list[Message]:
-        return [message for message in self.messages if message.role == role]
+    def get_from(self, role: MessageRole) -> list[MessagesItem]:
+        return [
+            message
+            for message in self.messages
+            if isinstance(message, Message) and message.role == role
+        ]
 
-    def add(self, *messages: Message) -> None:
+    def add(self, *messages: MessagesItem) -> None:
         self.messages.extend(messages)
 
     def extend(self, messages: Messages) -> None:
@@ -159,13 +232,13 @@ class Messages:
     def clear(self) -> None:
         self.messages.clear()
 
-    def to_dicts(self) -> list[MessageDict]:
+    def to_dicts(self) -> list[MessagesDict]:
         return [message.to_dict() for message in self.messages]
 
     def __len__(self) -> int:
         return len(self.messages)
 
-    def __getitem__(self, index) -> Message:
+    def __getitem__(self, index) -> MessagesItem:
         return self.messages[index]
 
     def __iter__(self):

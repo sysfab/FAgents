@@ -1,7 +1,13 @@
 from .messages import (
     Messages,
+    MessagesItem,
+    MessageDict,
     Message,
     MessageDict,
+    ToolCall,
+    ToolCallDict,
+    ToolCallOutput,
+    ToolCallOutputDict,
     System,
     User,
     Assistant,
@@ -16,8 +22,14 @@ from .agents import Agent, tool
 
 __all__ = [
     "Messages",
+    "MessagesItem",
+    "MessageDict",
     "Message",
     "MessageDict",
+    "ToolCall",
+    "ToolCallDict",
+    "ToolCallOutput",
+    "ToolCallOutputDict",
     "System",
     "User",
     "Assistant",
