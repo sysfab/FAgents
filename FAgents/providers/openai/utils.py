@@ -9,13 +9,12 @@ from openai.types.responses.response_input_text_param import ResponseInputTextPa
 from openai.types.responses.response_input_image_param import ResponseInputImageParam
 from openai.types.responses.response_input_file_param import ResponseInputFileParam
 
-from FAgents.conversations import Text, Image, File
+from FAgents import Text, Image, File
 
 from typing import TYPE_CHECKING, Union, Any
 
 if TYPE_CHECKING:
-    from FAgents.agents import Tool
-    from FAgents.conversations import Conversation, Message
+    from FAgents import Message, Messages, Tool
 
 
 def to_openai_tool(tool: Tool[Any, Any]) -> FunctionTool:
@@ -88,8 +87,8 @@ def to_openai_message(message: Message) -> EasyInputMessageParam:
     return {"role": message.role, "content": content, "type": "message"}
 
 
-def to_openai_input(conversation: Conversation) -> ResponseInputParam:
-    return [to_openai_message(message) for message in conversation]
+def to_openai_input(messages: Messages) -> ResponseInputParam:
+    return [to_openai_message(message) for message in messages]
 
 
 def _python_type_to_json(ann: Any) -> str:

@@ -1,4 +1,4 @@
-from FAgents.providers import Runner, Provider
+from FAgents.providers import Runner, RunResult, Provider
 from FAgents.agents import Agent
 
 from openai import AsyncOpenAI
@@ -20,8 +20,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Any, Callable
-    from FAgents.agents import Tool
-    from FAgents.conversations import Conversation
+    from FAgents import Messages, Tool
 
 
 class OpenAIRunner(Runner):
@@ -29,9 +28,7 @@ class OpenAIRunner(Runner):
         self.provider: OpenAI = provider
         self.agent: type[Agent] = agent
 
-    async def Run(
-        self, conversation: Conversation, tools: None | list[Tool[Any, Any]] = None
-    ):
+    async def Run(self, messages: Messages, tools: None | list[Tool[Any, Any]] = None):
         tools = tools or list()
         tools.extend(self.agent.Tools)
 
@@ -46,7 +43,7 @@ class OpenAIRunner(Runner):
                     verbosity=self.agent.Verbosity,
                 ),
             ),
-            input=to_openai_input(conversation),
+            input=to_openai_input(messages),
             run_config=RunConfig(model_provider=self.provider.openai_provider),
         )
 
