@@ -46,6 +46,7 @@ class Tool[**P, R]:
         self.Name: str = func.__name__
         self.Description: str = inspect.cleandoc(func.__doc__ or "")
         self.Signature: inspect.Signature = inspect.signature(func)  # type: ignore[arg-type]
+        self.IsAwaitable = inspect.iscoroutinefunction(func) or inspect.isasyncgenfunction(func) or inspect.isawaitable(func)
         wraps(func)(self)  # type: ignore[arg-type]
 
     @property

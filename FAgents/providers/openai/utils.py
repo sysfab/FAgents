@@ -11,10 +11,9 @@ from openai.types.responses.response_input_file_param import ResponseInputFilePa
 
 from FAgents.conversations import Text, Image, File
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, Any
 
 if TYPE_CHECKING:
-    from typing import Any
     from FAgents.agents import Tool
     from FAgents.conversations import Conversation, Message
 
@@ -32,7 +31,11 @@ def to_openai_tool(tool: Tool[Any, Any]) -> FunctionTool:
 
     async def on_invoke(ctx: ToolContext[Any], args_json: str) -> Any:
         args = json.loads(args_json)
-        return tool(**args)
+
+        if tool.IsAwaitable:
+            return await tool(**args)
+        else:
+            return tool(**args)
 
     return FunctionTool(
         name=tool.Name,
@@ -46,11 +49,11 @@ def to_openai_tool(tool: Tool[Any, Any]) -> FunctionTool:
     )
 
 
-def _text_to_openai(text: "Text") -> ResponseInputTextParam:
+def _text_to_openai(text: Text) -> ResponseInputTextParam:
     return {"type": "input_text", "text": text.text}
 
 
-def _image_to_openai(image: "Image") -> ResponseInputImageParam:
+def _image_to_openai(image: Image) -> ResponseInputImageParam:
     return {
         "type": "input_image",
         "detail": image.detail or "auto",
@@ -58,7 +61,7 @@ def _image_to_openai(image: "Image") -> ResponseInputImageParam:
     }
 
 
-def _file_to_openai(file: "File") -> ResponseInputFileParam:
+def _file_to_openai(file: File) -> ResponseInputFileParam:
     result: ResponseInputFileParam = {"type": "input_file"}
     if file.id is not None:
         result["file_id"] = file.id
@@ -73,7 +76,7 @@ def _file_to_openai(file: "File") -> ResponseInputFileParam:
     return result
 
 
-def to_openai_message(message: "Message") -> EasyInputMessageParam:
+def to_openai_message(message: Message) -> EasyInputMessageParam:
     content = [
         _text_to_openai(item)
         if isinstance(item, Text)
@@ -85,7 +88,7 @@ def to_openai_message(message: "Message") -> EasyInputMessageParam:
     return {"role": message.role, "content": content, "type": "message"}
 
 
-def to_openai_input(conversation: "Conversation") -> ResponseInputParam:
+def to_openai_input(conversation: Conversation) -> ResponseInputParam:
     return [to_openai_message(message) for message in conversation]
 
 
