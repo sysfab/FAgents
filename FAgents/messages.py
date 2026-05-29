@@ -153,6 +153,9 @@ class Messages:
     def add(self, *messages: Message) -> None:
         self.messages.extend(messages)
 
+    def extend(self, messages: Messages) -> None:
+        self.messages.extend(messages.messages)
+
     def clear(self) -> None:
         self.messages.clear()
 
