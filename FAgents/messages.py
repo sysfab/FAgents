@@ -3,31 +3,19 @@ from dataclasses import dataclass
 from typing import TypedDict, Literal, Union, cast, Any
 
 
-class TextDict(TypedDict):
-    type: Literal["text"]
-    text: str
-
-
 @dataclass
 class Text:
     text: str
 
-    def to_dict(self) -> TextDict:
+    def to_dict(self) -> dict:
         return {"text": self.text, "type": "text"}
 
     @classmethod
-    def from_dict(cls, t_dict: TextDict) -> Text:
+    def from_dict(cls, t_dict: dict) -> Text:
         return cls(text=t_dict["text"])
 
 
 type ImageFormat = Literal["png", "jpg", "webp"]
-
-
-class ImageDict(TypedDict):
-    type: Literal["image"]
-    url: str
-    format: ImageFormat | None
-    detail: Literal["low", "high", "auto", "original"] | None
 
 
 @dataclass
@@ -36,7 +24,7 @@ class Image:
     format: ImageFormat | None = None
     detail: Literal["low", "high", "auto", "original"] | None = None
 
-    def to_dict(self) -> ImageDict:
+    def to_dict(self) -> dict:
         return {
             "type": "image",
             "url": self.url,
@@ -45,19 +33,10 @@ class Image:
         }
 
     @classmethod
-    def from_dict(cls, i_dict: ImageDict) -> Image:
+    def from_dict(cls, i_dict: dict) -> Image:
         return cls(
             url=i_dict["url"], format=i_dict.get("format"), detail=i_dict.get("detail")
         )
-
-
-class FileDict(TypedDict, total=False):
-    type: Literal["file"]
-    detail: Literal["low", "high"]
-    url: str | None
-    id: str | None
-    data: str | None
-    filename: str | None
 
 
 @dataclass
@@ -68,7 +47,7 @@ class File:
     data: str | None = None
     filename: str | None = None
 
-    def to_dict(self) -> FileDict:
+    def to_dict(self) -> dict:
         return {
             "type": "file",
             "id": self.id,
@@ -79,7 +58,7 @@ class File:
         }
 
     @classmethod
-    def from_dict(cls, f_dict: FileDict) -> File:
+    def from_dict(cls, f_dict: dict) -> File:
         return cls(
             detail=f_dict["detail"],
             id=f_dict.get("id"),
@@ -91,13 +70,6 @@ class File:
 
 type MessageRole = Literal["user", "assistant", "system", "developer"]
 type MessageContent = list[Text | Image | File]
-type MessageDictContent = list[TextDict | ImageDict | FileDict]
-
-
-class MessageDict(TypedDict):
-    type: Literal["message"]
-    role: MessageRole
-    content: MessageDictContent
 
 
 @dataclass
@@ -105,12 +77,12 @@ class Message:
     role: MessageRole
     content: MessageContent
 
-    def to_dict(self) -> MessageDict:
+    def to_dict(self) -> dict:
         content = [element.to_dict() for element in self.content]
         return {"type": "message", "role": self.role, "content": content}
 
     @classmethod
-    def from_dict(cls, m_dict: MessageDict) -> Message:
+    def from_dict(cls, m_dict: dict) -> Message:
         content = []
         for content_dict in m_dict["content"]:
             match content_dict["type"]:
@@ -122,7 +94,7 @@ class Message:
                     content.append(File.from_dict(content_dict))
 
         return cls(role=m_dict["role"], content=content)
-    
+
     def __str__(self) -> str:
         return "".join([item.text for item in self.content if isinstance(item, Text)])
 
@@ -148,15 +120,6 @@ System = _RoleMessage("system")
 Developer = _RoleMessage("developer")
 
 
-class ToolCallDict(TypedDict, total=False):
-    type: Literal["tool_call"]
-    arguments: str
-    name: str
-    status: str
-    id: str
-    call_id: str | None
-
-
 @dataclass
 class ToolCall:
     arguments: str
@@ -165,7 +128,7 @@ class ToolCall:
     id: str
     call_id: str | None
 
-    def to_dict(self) -> ToolCallDict:
+    def to_dict(self) -> dict:
         return {
             "type": "tool_call",
             "arguments": self.arguments,
@@ -176,7 +139,7 @@ class ToolCall:
         }
 
     @classmethod
-    def from_dict(cls, tc_dict: ToolCallDict) -> ToolCall:
+    def from_dict(cls, tc_dict: dict) -> ToolCall:
         return cls(
             arguments=tc_dict["arguments"],
             name=tc_dict["name"],
@@ -186,18 +149,12 @@ class ToolCall:
         )
 
 
-class ToolCallOutputDict(TypedDict):
-    type: Literal["tool_call_output"]
-    output: Any
-    call_id: str | None
-
-
 @dataclass
 class ToolCallOutput:
     output: Any
     call_id: str | None
 
-    def to_dict(self) -> ToolCallOutputDict:
+    def to_dict(self) -> dict:
         return {
             "type": "tool_call_output",
             "output": self.output,
@@ -205,7 +162,7 @@ class ToolCallOutput:
         }
 
     @classmethod
-    def from_dict(cls, tco_dict: ToolCallOutputDict) -> ToolCallOutput:
+    def from_dict(cls, tco_dict: dict) -> ToolCallOutput:
         return cls(
             output=tco_dict["output"],
             call_id=tco_dict["call_id"],
@@ -213,7 +170,6 @@ class ToolCallOutput:
 
 
 type MessagesItem = Message | ToolCall | ToolCallOutput
-type MessagesDict = MessageDict | ToolCallDict | ToolCallOutputDict
 
 
 class Messages:
@@ -236,7 +192,7 @@ class Messages:
     def clear(self) -> None:
         self.messages.clear()
 
-    def to_dicts(self) -> list[MessagesDict]:
+    def to_dicts(self) -> list[dict]:
         return [message.to_dict() for message in self.messages]
 
     def __len__(self) -> int:
