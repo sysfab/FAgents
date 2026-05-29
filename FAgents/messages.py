@@ -122,6 +122,9 @@ class Message:
                     content.append(File.from_dict(content_dict))
 
         return cls(role=m_dict["role"], content=content)
+    
+    def __str__(self) -> str:
+        return "".join([item.text for item in self.content if isinstance(item, Text)])
 
 
 def _RoleMessage(role: MessageRole):
