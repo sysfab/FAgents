@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Any, Callable
-    from FAgents import Messages, Tool
+    from FAgents import Messages, tool
 
 
 class OpenAIRunner(Runner):
@@ -28,7 +28,7 @@ class OpenAIRunner(Runner):
         self.provider: OpenAI = provider
         self.agent: type[Agent] = agent
 
-    async def run(self, messages: Messages, tools: None | list[Tool[Any, Any]] = None):
+    async def run(self, messages: Messages, tools: None | list[tool[Any, Any]] = None):
         tools = tools or list()
         tools.extend(self.agent.Tools)
 

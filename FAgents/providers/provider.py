@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Any, Callable
-    from FAgents import Message, Messages, Agent, Tool
+    from FAgents import Message, Messages, Agent, tool
 
 
 @dataclass
@@ -19,7 +19,7 @@ class RunResult:
 class Runner(ABC):
     @abstractmethod
     async def run(
-        self, messages: Messages, tools: None | list[Tool[Any, Any]] = None
+        self, messages: Messages, tools: None | list[tool[Any, Any]] = None
     ) -> RunResult: ...
 
 

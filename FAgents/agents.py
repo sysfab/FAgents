@@ -21,7 +21,7 @@ class Agent:
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
-        cls.Tools = [value for value in vars(cls).values() if isinstance(value, Tool)]
+        cls.Tools = [value for value in vars(cls).values() if isinstance(value, tool)]
 
     @classmethod
     def runner(cls, provider: Provider) -> Runner:
@@ -38,7 +38,7 @@ class NamedCallable[**P, R](Protocol):
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> R: ...
 
 
-class Tool[**P, R]:
+class tool[**P, R]:
     """Wraps a callable as a named, documented tool."""
 
     def __init__(self, func: NamedCallable[P, R]) -> None:
@@ -60,7 +60,7 @@ class Tool[**P, R]:
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> R:
         return self._func(*args, **kwargs)
 
-    def __get__(self, obj: Any, objtype: Any = None) -> "Tool[P, R]":
+    def __get__(self, obj: Any, objtype: Any = None) -> "tool[P, R]":
         return self
 
     def __repr__(self) -> str:

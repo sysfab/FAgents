@@ -14,10 +14,10 @@ from FAgents import Text, Image, File
 from typing import TYPE_CHECKING, Union, Any
 
 if TYPE_CHECKING:
-    from FAgents import Message, Messages, Tool
+    from FAgents import Message, Messages, tool
 
 
-def to_openai_tool(tool: Tool[Any, Any]) -> FunctionTool:
+def to_openai_tool(tool: tool[Any, Any]) -> FunctionTool:
     params = tool.Signature.parameters
     properties: dict[str, object] = {}
     required: list[str] = []

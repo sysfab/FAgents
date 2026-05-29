@@ -12,7 +12,7 @@ from .messages import (
     File,
     FileDict,
 )
-from .agents import Agent, Tool
+from .agents import Agent, tool
 
 __all__ = [
     "Messages",
@@ -28,5 +28,5 @@ __all__ = [
     "File",
     "FileDict",
     "Agent",
-    "Tool",
+    "tool",
 ]

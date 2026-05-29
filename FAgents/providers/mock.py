@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Any, Callable
-    from FAgents import Messages, Tool
+    from FAgents import Messages, tool
 
 
 class MockRunner(Runner):
@@ -14,7 +14,7 @@ class MockRunner(Runner):
         self.agent: type[Agent] = agent
 
     async def run(
-        self, messages: Messages, tools: None | list[Tool[Any, Any]] = None
+        self, messages: Messages, tools: None | list[tool[Any, Any]] = None
     ) -> RunResult:
         return RunResult(Message=Assistant("Hello world!"))
 
