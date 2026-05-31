@@ -17,13 +17,13 @@ class Text:
         return cls(text=t_dict["text"])
 
 
-type ImageFormat = Literal["png", "jpg", "webp"]
+type ImageFormat = Literal["image/png", "image/jpeg", "image/webp"]
 
 _EXT_TO_FORMAT: dict[str, ImageFormat] = {
-    ".png": "png",
-    ".jpg": "jpg",
-    ".jpeg": "jpg",
-    ".webp": "webp",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".webp": "image/webp",
 }
 
 
