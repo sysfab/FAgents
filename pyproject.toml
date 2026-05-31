@@ -23,3 +23,9 @@ dependencies = [
 
 [project.urls]
 Repository = "https://github.com/sysfab/FAgents.git"
+
+
+[dependency-groups]
+dev = [
+    "zensical>=0.0.43",
+]
