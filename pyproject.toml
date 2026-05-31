@@ -1,6 +1,7 @@
 [project]
 name = "FAgents"
 version = "0.1.0"
+readme = "README.md"
 description = "Python Agent Orchestration Framework"
 requires-python = ">=3.14"
 dependencies = [
