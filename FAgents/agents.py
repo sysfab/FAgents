@@ -15,7 +15,7 @@ type VerbosityMode = Literal["low", "medium", "high"]
 @dataclass
 class Agent:
     Name: str
-    Instructions: str
+    Instructions: str = ""
     Reasoning: ReasoningMode = "none"
     Verbosity: VerbosityMode = "medium"
 
