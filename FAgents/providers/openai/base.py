@@ -1,4 +1,4 @@
-from FAgents import Message, Messages, MessagesItem, Agent
+from FAgents import Messages, Agent
 from FAgents.providers import Runner, RunResult, Provider
 
 from openai import AsyncOpenAI
@@ -8,9 +8,6 @@ from agents import (
     ModelSettings,
     OpenAIProvider,
     RunConfig,
-    MessageOutputItem,
-    ToolCallItem,
-    ToolCallOutputItem,
     set_default_openai_key,
 )
 
@@ -24,10 +21,10 @@ from .utils import (
 )
 
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Any, Callable
+    from typing import Any
     from FAgents import tool
 
 

@@ -1,11 +1,11 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from functools import wraps
 import inspect
 
-from typing import TYPE_CHECKING, overload, Protocol
+from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
-    from typing import Literal, Callable, ClassVar, Any
+    from typing import Literal, Any
     from FAgents.providers import Provider, Runner
 
 type ReasoningMode = Literal["none", "minimal", "low", "medium", "high", "xhigh"]

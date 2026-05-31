@@ -9,7 +9,7 @@ from FAgents import Messages, Message, ToolCall, ToolCallOutput, Text, Image, Fi
 from typing import TYPE_CHECKING, Union, Literal, LiteralString, Any, cast
 
 if TYPE_CHECKING:
-    from FAgents import MessagesItem, tool
+    from FAgents import tool
 
 
 #

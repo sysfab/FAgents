@@ -3,7 +3,7 @@ from pathlib import Path
 import filetype
 from dataclasses import dataclass
 
-from typing import TypedDict, Literal, Union, Any
+from typing import Literal, Any
 
 
 @dataclass
@@ -83,7 +83,7 @@ class File:
     def from_file(cls, path: str | Path, **kwargs) -> File:
         path = Path(path)
         guess = filetype.guess(path)
-        mime = guess.mime if guess != None else "text/plain"
+        mime = guess.mime if guess is not None else "text/plain"
         raw = base64.b64encode(path.read_bytes()).decode()
         data = f"data:{mime};base64,{raw}"
         return cls.from_base64(data=data, filename=path.name, **kwargs)
@@ -99,10 +99,10 @@ class File:
         )
 
     def __str__(self) -> str:
-        if self.filename != None:
+        if self.filename is not None:
             return f"[File '{self.filename}']"
         else:
-            return f"[File]"
+            return "[File]"
 
 
 type MessageRole = Literal["user", "assistant", "system", "developer"]
