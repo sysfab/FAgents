@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Any, Callable
-    from FAgents import Message, Messages, Agent, tool
+    from FAgents import Message, Messages, MessagesItem, Agent, tool
 
 
 @dataclass
 class RunResult:
-    Message: Message
+    Message: MessagesItem
     NewMessages: Messages
     ProviderSpecific: Any = None
 

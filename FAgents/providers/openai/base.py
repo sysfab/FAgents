@@ -20,9 +20,7 @@ from agents import Runner as AgentsRunner
 from .utils import (
     to_openai_tool,
     to_openai_input,
-    openai_to_message,
-    openai_to_tool_call,
-    openai_to_tool_call_output,
+    from_openai_input,
 )
 
 
@@ -57,23 +55,10 @@ class OpenAIRunner(Runner):
             run_config=RunConfig(model_provider=self.provider.openai_provider),
         )
 
-        new_messages = Messages()
-        for message in result.new_items:
-            new_message = None
-
-            if message.type == "message_output_item":
-                new_message = openai_to_message(cast(MessageOutputItem, message))
-            elif message.type == "tool_call_item":
-                new_message = openai_to_tool_call(cast(ToolCallItem, message))
-            elif message.type == "tool_call_output_item":
-                new_message = openai_to_tool_call_output(
-                    cast(ToolCallOutputItem, message)
-                )
-
-            if new_message != None:
-                new_messages.add(new_message)
-
-        message = cast(Message, new_messages[-1])
+        new_messages = from_openai_input(
+            [item.to_input_item() for item in result.new_items]
+        )
+        message = new_messages[-1]
 
         return RunResult(
             Message=message,

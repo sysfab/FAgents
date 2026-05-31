@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from typing import TypedDict, Literal, Union, cast, Any
+from typing import TypedDict, Literal, Union, Any
 
 
 @dataclass
@@ -109,7 +109,7 @@ def _RoleMessage(role: MessageRole):
                 parts.extend(c)
             else:
                 parts.append(c)
-        return Message(role, parts)
+        return Message(role=role, content=parts)
 
     return _message
 
