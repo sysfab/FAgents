@@ -1,5 +1,5 @@
 # FAgents  
-FAgents is a python agent orchestration framework built for ease of use and plug-and-play providers (OpenAI, Claude, Google, Deepsek, Local, etc) with one syntax.  
+FAgents is a python agent orchestration framework built for ease of use and plug-and-play providers (OpenAI, Claude, Google, Deepseek, Local, etc) with one syntax.  
 
 ## Example code  
 Simple TUI chat with the agent:
