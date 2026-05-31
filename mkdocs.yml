@@ -1,0 +1,16 @@
+site_name: FAgents Docs
+
+nav:
+  - Home: index.md
+
+plugins:
+  - search
+
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - src
+
+  - mkdocs-autoapi:
+      autoapi_dir: src
