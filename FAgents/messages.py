@@ -33,6 +33,11 @@ class Image:
         }
 
     @classmethod
+    def from_base64(cls, data: str, format: ImageFormat, **kwargs) -> "Image":
+        url = f"data:{format};base64,{data}"
+        return cls(url=url, format=format, **kwargs)
+
+    @classmethod
     def from_dict(cls, i_dict: dict) -> Image:
         return cls(
             url=i_dict["url"], format=i_dict.get("format"), detail=i_dict.get("detail")
