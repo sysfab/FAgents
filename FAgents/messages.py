@@ -1,5 +1,6 @@
 import base64
 from pathlib import Path
+import filetype
 from dataclasses import dataclass
 
 from typing import TypedDict, Literal, Union, Any
@@ -17,20 +18,10 @@ class Text:
         return cls(text=t_dict["text"])
 
 
-type ImageFormat = Literal["image/png", "image/jpeg", "image/webp"]
-
-_EXT_TO_FORMAT: dict[str, ImageFormat] = {
-    ".png": "image/png",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".webp": "image/webp",
-}
-
-
 @dataclass
 class Image:
     url: str
-    format: ImageFormat | None = None
+    format: str
     detail: Literal["low", "high", "auto", "original"] | None = None
 
     def to_dict(self) -> dict:
@@ -42,29 +33,27 @@ class Image:
         }
 
     @classmethod
-    def from_base64(cls, data: str, format: ImageFormat, **kwargs) -> Image:
+    def from_base64(cls, data: str, format: str, **kwargs) -> Image:
         url = f"data:{format};base64,{data}"
         return cls(url=url, format=format, **kwargs)
 
     @classmethod
     def from_file(cls, path: str | Path, **kwargs) -> Image:
         path = Path(path)
-        fmt = _EXT_TO_FORMAT.get(path.suffix.lower())
-        if fmt is None:
-            raise ValueError(f"Unsupported image format: {path.suffix!r}")
+        mime = filetype.guess(path).mime
         data = base64.b64encode(path.read_bytes()).decode()
-        return cls.from_base64(data=data, format=fmt, **kwargs)
+        return cls.from_base64(data=data, format=mime, **kwargs)
 
     @classmethod
     def from_dict(cls, i_dict: dict) -> Image:
         return cls(
-            url=i_dict["url"], format=i_dict.get("format"), detail=i_dict.get("detail")
+            url=i_dict["url"], format=i_dict["format"], detail=i_dict.get("detail")
         )
 
 
 @dataclass
 class File:
-    detail: Literal["low", "high"]
+    detail: Literal["low", "high"] = "high"
     id: str | None = None
     url: str | None = None
     data: str | None = None
@@ -79,6 +68,19 @@ class File:
             "filename": self.filename,
             "detail": self.detail,
         }
+
+    @classmethod
+    def from_base64(cls, data: str, filename: str, **kwargs) -> File:
+        return cls(data=data, filename=filename, **kwargs)
+
+    @classmethod
+    def from_file(cls, path: str | Path, **kwargs) -> File:
+        path = Path(path)
+        guess = filetype.guess(path)
+        mime = guess.mime if guess != None else "text/plain"
+        raw = base64.b64encode(path.read_bytes()).decode()
+        data = f"data:{mime};base64,{raw}"
+        return cls.from_base64(data=data, filename=path.name, **kwargs)
 
     @classmethod
     def from_dict(cls, f_dict: dict) -> File:

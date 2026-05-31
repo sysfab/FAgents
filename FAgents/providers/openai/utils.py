@@ -204,6 +204,7 @@ def from_openai_image(image: dict) -> Image:
     return Image(
         detail=image.get("detail"),
         url=image["image_url"],
+        format=image["format"],
     )
 
 
