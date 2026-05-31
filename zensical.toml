@@ -80,6 +80,7 @@ scheme = "default"
 toggle.icon = "lucide/sun"
 toggle.name = "Switch to dark mode"
 
+
 [[project.theme.palette]]
 scheme = "slate"
 toggle.icon = "lucide/moon"
@@ -89,6 +90,16 @@ toggle.name = "Switch to light mode"
 #[[project.extra.social]]
 icon = "fontawesome/brands/github"
 link = "https://github.com/sysfab/FAgents"
+
+
+[project.plugins.mkdocstrings.handlers.python]
+inventories = ["https://docs.python.org/3/objects.inv"]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "google"
+inherited_members = true
+show_source = false
 
 
 [project.markdown_extensions.abbr]
