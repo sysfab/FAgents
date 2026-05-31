@@ -17,6 +17,9 @@ class Text:
     def from_dict(cls, t_dict: dict) -> Text:
         return cls(text=t_dict["text"])
 
+    def __str__(self) -> str:
+        return self.text
+
 
 @dataclass
 class Image:
@@ -49,6 +52,9 @@ class Image:
         return cls(
             url=i_dict["url"], format=i_dict["format"], detail=i_dict.get("detail")
         )
+
+    def __str__(self) -> str:
+        return "[Image]"
 
 
 @dataclass
@@ -92,6 +98,12 @@ class File:
             filename=f_dict.get("filename"),
         )
 
+    def __str__(self) -> str:
+        if self.filename != None:
+            return f"[File '{self.filename}']"
+        else:
+            return f"[File]"
+
 
 type MessageRole = Literal["user", "assistant", "system", "developer"]
 type MessageContent = list[Text | Image | File]
@@ -121,7 +133,7 @@ class Message:
         return cls(role=m_dict["role"], content=content)
 
     def __str__(self) -> str:
-        return "".join([item.text for item in self.content if isinstance(item, Text)])
+        return "".join([str(item) for item in self.content])
 
 
 def _RoleMessage(role: MessageRole):
