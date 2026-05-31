@@ -1,3 +1,5 @@
+import base64
+from pathlib import Path
 from dataclasses import dataclass
 
 from typing import TypedDict, Literal, Union, Any
@@ -17,6 +19,13 @@ class Text:
 
 type ImageFormat = Literal["png", "jpg", "webp"]
 
+_EXT_TO_FORMAT: dict[str, ImageFormat] = {
+    ".png": "png",
+    ".jpg": "jpg",
+    ".jpeg": "jpg",
+    ".webp": "webp",
+}
+
 
 @dataclass
 class Image:
@@ -33,9 +42,18 @@ class Image:
         }
 
     @classmethod
-    def from_base64(cls, data: str, format: ImageFormat, **kwargs) -> "Image":
+    def from_base64(cls, data: str, format: ImageFormat, **kwargs) -> Image:
         url = f"data:{format};base64,{data}"
         return cls(url=url, format=format, **kwargs)
+
+    @classmethod
+    def from_file(cls, path: str | Path, **kwargs) -> Image:
+        path = Path(path)
+        fmt = _EXT_TO_FORMAT.get(path.suffix.lower())
+        if fmt is None:
+            raise ValueError(f"Unsupported image format: {path.suffix!r}")
+        data = base64.b64encode(path.read_bytes()).decode()
+        return cls.from_base64(data=data, format=fmt, **kwargs)
 
     @classmethod
     def from_dict(cls, i_dict: dict) -> Image:
