@@ -7,8 +7,10 @@ Simple TUI chat with the agent:
 import asyncio
 
 from FAgents import Agent, tool
-from FAgents.messages import Messages, User
 from FAgents.providers import OpenAI
+
+from FAgents.messages import Messages
+from Fagents.message import User
 
 
 class A(Agent):

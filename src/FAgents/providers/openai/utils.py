@@ -120,7 +120,7 @@ def to_openai_text(text: Text, item_type: Literal["input", "output"]):
 def to_openai_image(image: Image, item_type: Literal["input", "output"]):
     return {
         "type": f"{item_type}_image",
-        "detail": image.detail or "auto",
+        "detail": image.detail,
         "image_url": image.url,
     }
 
@@ -202,7 +202,7 @@ def from_openai_text(text: dict) -> Text:
 
 def from_openai_image(image: dict) -> Image:
     return Image(
-        detail=image.get("detail"),
+        detail=image["detail"],
         url=image["image_url"],
         format=image["format"],
     )
