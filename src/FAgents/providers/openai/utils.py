@@ -173,7 +173,7 @@ def from_openai_message(message: dict) -> Message:
         elif "file" in content_item["type"]:
             content.append(from_openai_file(content_item))
 
-    return Message(role=message["role"], content=content)
+    return Message(*content, role=message["role"])
 
 
 def from_openai_tool_call(tool_call: dict) -> ToolCall:

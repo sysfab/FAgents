@@ -83,26 +83,36 @@ class Message:
     Object that represents message
 
     Args:
+        *content (str | Text | Image | File): Message contents, strings will be converted into Text objects
         role (MessageRole): Message role
-        content (list[str | Text | Image | File]): Message content, strings will be converted into Text objects
 
     Attributes:
+        content (list[Text | Image | File]): Message contents
         role (MessageRole): Message role
-        content (list[Text | Image | File]): Message content
+    
+    Usage:
+        ```py
+        Message(
+            "Hello! Can you describe this image?",
+            Image.from_file("image.png"),
+
+            role='user'
+        )
+        ```
     """
 
-    role: MessageRole
     content: list[Text | Image | File]
+    role: MessageRole
 
-    def __init__(self, role: MessageRole, content: list[str | Text | Image | File]):
-        self.role: MessageRole = role
+    def __init__(self, *content: str | Text | Image | File, role: MessageRole):
         self.content: list[Text | Image | File] = [
             Text(item) if isinstance(item, str) else item for item in content
         ]
+        self.role: MessageRole = role
 
     def to_dict(self) -> dict:
         content = [element.to_dict() for element in self.content]
-        return {"type": "message", "role": self.role, "content": content}
+        return {"type": "message", "content": content, "role": self.role}
 
     @classmethod
     def from_dict(cls, m_dict: dict) -> Message:
@@ -116,7 +126,7 @@ class Message:
                 case "file":
                     content.append(File.from_dict(content_dict))
 
-        return cls(role=m_dict["role"], content=content)
+        return cls(*content, role=m_dict["role"])
 
     def __str__(self) -> str:
         return "".join([str(item) for item in self.content])
@@ -124,7 +134,7 @@ class Message:
 
 def _RoleMessage(role: MessageRole):
     def _message(*args, **kwargs) -> Message:
-        return Message(role=role, *args, **kwargs)
+        return Message(*args, role=role, **kwargs)
 
     return _message
 
@@ -135,8 +145,16 @@ def User(*args, **kwargs) -> Message:
 
     Returns:
         (Message): Message from the 'user'
+    
+    Usage:
+        ```py
+        User(
+            "Hello! Can you describe this image?",
+            Image.from_file("image.png"),
+        )
+        ```
     """
-    return Message(role="user", *args, **kwargs)
+    return Message(*args, role="user", **kwargs)
 
 
 def Assistant(*args, **kwargs) -> Message:
@@ -145,8 +163,13 @@ def Assistant(*args, **kwargs) -> Message:
 
     Returns:
         (Message): Message from the 'assistant'
+    
+    Usage:
+        ```py
+        Assistant("Sorry, i can't help you with that")
+        ```
     """
-    return Message(role="assistant", *args, **kwargs)
+    return Message(*args, role="assistant", **kwargs)
 
 
 def System(*args, **kwargs) -> Message:
@@ -155,8 +178,13 @@ def System(*args, **kwargs) -> Message:
 
     Returns:
         (Message): Message from the 'system'
+    
+    Usage:
+        ```py
+        System("You are helpful assistant")
+        ```
     """
-    return Message(role="system", *args, **kwargs)
+    return Message(*args, role="system", **kwargs)
 
 
 def Developer(*args, **kwargs) -> Message:
@@ -165,5 +193,10 @@ def Developer(*args, **kwargs) -> Message:
 
     Returns:
         (Message): Message from the 'developer'
+    
+    Usage:
+        ```py
+        Developer("Do not answer in text, use `send_message` tool")
+        ```
     """
-    return Message(role="developer", *args, **kwargs)
+    return Message(*args, role="developer", **kwargs)
