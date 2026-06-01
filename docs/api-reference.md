@@ -4,6 +4,14 @@ hide:
 - navigation
 ---
 
-# ::: FAgents
+# API Reference
+## ::: FAgents
     options:
-        show_submodules: true
+        show_root_heading: true
+
+---
+
+## Providers
+### ::: FAgents.providers.openai
+    options:
+        show_root_heading: true
