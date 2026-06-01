@@ -65,6 +65,14 @@ class OpenAIRunner(Runner):
 
 
 class OpenAI(Provider):
+    """
+    OpenAI's Agents-SDK provider
+
+    Args:
+        model (str): Model to use
+        token (str): Token to use
+    """
+
     def __init__(self, model: str, token: str):
         self.model = model
         self.token = token

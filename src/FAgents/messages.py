@@ -8,6 +8,13 @@ from typing import Literal, Any
 
 @dataclass
 class Text:
+    """
+    Object that represents text
+
+    Attributes:
+        text (str): Text
+    """
+
     text: str
 
     def to_dict(self) -> dict:
@@ -23,9 +30,18 @@ class Text:
 
 @dataclass
 class Image:
+    """
+    Object that represents image
+
+    Attributes:
+        url (str): Image URL
+        format (str): MIME-type of an image
+        detail (Literal["low", "high", "auto", "original"]): Detail level of an image
+    """
+
     url: str
     format: str
-    detail: Literal["low", "high", "auto", "original"] | None = None
+    detail: Literal["low", "high", "auto", "original"] = "auto"
 
     def to_dict(self) -> dict:
         return {
@@ -59,11 +75,22 @@ class Image:
 
 @dataclass
 class File:
-    detail: Literal["low", "high"] = "high"
+    """
+    Object that represents file
+
+    Attributes:
+        id (str | None): File ID
+        url (str | None): File URL
+        data (str | None): File data
+        filename (str | None): File name
+        detail (Literal["low", "high"]): Detail level of a file
+    """
+
     id: str | None = None
     url: str | None = None
     data: str | None = None
     filename: str | None = None
+    detail: Literal["low", "high"] = "high"
 
     def to_dict(self) -> dict:
         return {
@@ -106,13 +133,21 @@ class File:
 
 
 type MessageRole = Literal["user", "assistant", "system", "developer"]
-type MessageContent = list[Text | Image | File]
+"""Represents the role of a message sender in a chat conversation"""
 
 
 @dataclass
 class Message:
+    """
+    Object that represents message
+
+    Attributes:
+        role (MessageRole): Message role
+        content (list[Text | Image | File]): Message content
+    """
+
     role: MessageRole
-    content: MessageContent
+    content: list[Text | Image | File]
 
     def to_dict(self) -> dict:
         content = [element.to_dict() for element in self.content]
@@ -159,6 +194,10 @@ Developer = _RoleMessage("developer")
 
 @dataclass
 class ToolCall:
+    """
+    Object that represents tool call
+    """
+
     arguments: str
     name: str
     status: str
@@ -188,6 +227,14 @@ class ToolCall:
 
 @dataclass
 class ToolCallOutput:
+    """
+    Object that represents tool call output
+
+    Attributes:
+        output (Any): Output
+        call_id (str | None): Call ID of an output
+    """
+
     output: Any
     call_id: str | None
 
@@ -207,13 +254,30 @@ class ToolCallOutput:
 
 
 type MessagesItem = Message | ToolCall | ToolCallOutput
+"""Elements that Messages object can hold"""
 
 
 class Messages:
+    """
+    Object that stores message history (includes messages, tool calls, etc)
+
+    Args:
+        *messages (MessagesItem): Messages to store initially
+    """
+
     def __init__(self, *messages: MessagesItem):
         self.messages: list[MessagesItem] = list(messages)
 
-    def get_from(self, role: MessageRole) -> list[MessagesItem]:
+    def get_from(self, role: MessageRole) -> list[Message]:
+        """
+        Returns all messages from specific role
+
+        Args:
+            role (MessageRole): Role to get messages from
+        
+        Returns:
+            List of messages from this role
+        """
         return [
             message
             for message in self.messages
@@ -221,12 +285,27 @@ class Messages:
         ]
 
     def add(self, *messages: MessagesItem) -> None:
+        """
+        Add new messages to the end of the history
+
+        Args:
+            *messages (MessagesItem): Messages to add
+        """
         self.messages.extend(messages)
 
     def extend(self, messages: Messages) -> None:
+        """
+        Add messages from another Messages object
+
+        Args:
+            messages (Messages): Messages to add
+        """
         self.messages.extend(messages.messages)
 
     def clear(self) -> None:
+        """
+        Clear messages
+        """
         self.messages.clear()
 
     def to_dicts(self) -> list[dict]:

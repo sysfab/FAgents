@@ -9,6 +9,10 @@ if TYPE_CHECKING:
 
 
 class MockRunner(Runner):
+    """
+    Mock runner for test purposes
+    """
+
     def __init__(self, provider: Mock, agent: type[Agent]):
         self.provider: Mock = provider
         self.agent: type[Agent] = agent
@@ -16,6 +20,10 @@ class MockRunner(Runner):
     async def run(
         self, messages: Messages, tools: None | list[tool[Any, Any]] = None
     ) -> RunResult:
+        """
+        Returns:
+            Run result (Always 1 message from assistant with text `Hello world!`)
+        """
         return RunResult(
             NewMessages=Messages(Assistant("Hello world!")),
             Message=Assistant("Hello world!"),
@@ -23,6 +31,10 @@ class MockRunner(Runner):
 
 
 class Mock(Provider):
+    """
+    Mock provider for test purposes
+    """
+
     def __init__(self):
         pass
 
