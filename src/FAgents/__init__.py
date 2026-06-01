@@ -10,8 +10,8 @@ from .message import (
 )
 
 from .messages import Messages
-
-from .agents import Agent, tool
+from .agents import Agent
+from .tool import tool
 
 __all__ = [
     "Messages",

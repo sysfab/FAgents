@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from FAgents import Messages, MessagesItem, Agent, tool
+    from FAgents import Agent, tool
+    from FAgents.messages import Messages, MessagesItem
 
 
 @dataclass
