@@ -54,11 +54,26 @@ class Image:
 
     @classmethod
     def from_base64(cls, data: str, format: str, **kwargs) -> Image:
+        """
+        Get the Image object from base64 image data
+
+        Args:
+            data (str): Base64 image data
+            format (str): Encoded image format
+        """
+
         url = f"data:{format};base64,{data}"
         return cls(url=url, format=format, **kwargs)
 
     @classmethod
     def from_file(cls, path: str | Path, **kwargs) -> Image:
+        """
+        Get the Image object from file on a disk
+
+        Args:
+            path (str | Path): Image path
+        """
+
         path = Path(path)
         mime = filetype.guess(path).mime
         data = base64.b64encode(path.read_bytes()).decode()
@@ -80,7 +95,7 @@ class File:
     Attributes:
         id (str | None): File ID
         url (str | None): File URL
-        data (str | None): File data
+        data (str | None): File base64 data
         filename (str | None): File name
         detail (Literal["low", "high"]): Detail level of a file
     """
@@ -102,17 +117,20 @@ class File:
         }
 
     @classmethod
-    def from_base64(cls, data: str, filename: str, **kwargs) -> File:
-        return cls(data=data, filename=filename, **kwargs)
-
-    @classmethod
     def from_file(cls, path: str | Path, **kwargs) -> File:
+        """
+        Get the File object from file on a disk
+
+        Args:
+            path (str | Path): File path
+        """
+
         path = Path(path)
         guess = filetype.guess(path)
         mime = guess.mime if guess is not None else "text/plain"
         raw = base64.b64encode(path.read_bytes()).decode()
         data = f"data:{mime};base64,{raw}"
-        return cls.from_base64(data=data, filename=path.name, **kwargs)
+        return cls(data=data, filename=path.name, **kwargs)
 
     @classmethod
     def from_dict(cls, f_dict: dict) -> File:
