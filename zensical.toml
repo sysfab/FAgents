@@ -1,5 +1,5 @@
 [project]
-site_name = "FAgents Documentation"
+site_name = "FAgents"
 site_description = "Python Agent Orchestration Framework"
 
 site_author = "sysfab"
@@ -7,7 +7,7 @@ site_author = "sysfab"
 #site_url = "https://www.example.com/"
 
 nav = [
-  { "Home" = "index.md" },
+  { "Introduction" = "index.md" },
   { "API Reference" = "api-reference.md" },
 ]
 
