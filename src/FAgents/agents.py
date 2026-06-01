@@ -29,7 +29,7 @@ class Agent:
         class MyAgent(Agent):
             Name = "My Agent"
             Instructions = "You are helpful assistant"
-            
+
             @tool
             def some_tool(...) -> ...:
                 \"\"\"
@@ -60,7 +60,7 @@ class Agent:
 
         Returns:
             Provider specific runner
-        
+
         Usage:
             ```py
             from FAgents.providers import OpenAI

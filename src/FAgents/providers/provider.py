@@ -45,7 +45,7 @@ class Runner(ABC):
 
         Returns:
             Run result
-        
+
         Usage:
             ```py
             runner = MyAgent.runner(...)

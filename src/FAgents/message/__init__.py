@@ -82,6 +82,10 @@ class Message:
     """
     Object that represents message
 
+    Args:
+        role (MessageRole): Message role
+        content (list[str | Text | Image | File]): Message content, strings will be converted into Text objects
+
     Attributes:
         role (MessageRole): Message role
         content (list[Text | Image | File]): Message content
@@ -89,6 +93,12 @@ class Message:
 
     role: MessageRole
     content: list[Text | Image | File]
+
+    def __init__(self, role: MessageRole, content: list[str | Text | Image | File]):
+        self.role: MessageRole = role
+        self.content: list[Text | Image | File] = [
+            Text(item) if isinstance(item, str) else item for item in content
+        ]
 
     def to_dict(self) -> dict:
         content = [element.to_dict() for element in self.content]
