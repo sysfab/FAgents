@@ -30,18 +30,20 @@ class RunResult:
 
 class Runner(ABC):
     """
-    Object that parses data to/from provider specific format and returns run results 
+    Object that parses data to/from provider specific format and returns run results
     """
 
     @abstractmethod
-    async def run(self, messages: Messages, tools: None | list[tool[Any, Any]] = None) -> RunResult:
+    async def run(
+        self, messages: Messages, tools: None | list[tool[Any, Any]] = None
+    ) -> RunResult:
         """
         Runs the agent with provider specific settings
 
         Args:
             messages (Messages): Message history
             tools (None | list[tool[Any, Any]]): Run-specific tools
-        
+
         Returns:
             Run result
         """

@@ -274,7 +274,7 @@ class Messages:
 
         Args:
             role (MessageRole): Role to get messages from
-        
+
         Returns:
             List of messages from this role
         """

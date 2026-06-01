@@ -19,7 +19,7 @@ class Agent:
         Instructions (str): Instructions for the agent
         Reasoning (Literal["none", "minimal", "low", "medium", "high", "xhigh"]): Reasoning mode of an agent
         Verbosity (Literal["low", "medium", "high"]): Verbosity of an agent
-    
+
     Attributes:
         Tools (list[tool]): Agent's tools
     """
@@ -31,7 +31,9 @@ class Agent:
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
-        cls.Tools: list[tool] = [value for value in vars(cls).values() if isinstance(value, tool)]
+        cls.Tools: list[tool] = [
+            value for value in vars(cls).values() if isinstance(value, tool)
+        ]
 
     @classmethod
     def runner(cls, provider: Provider) -> Runner:
@@ -40,7 +42,7 @@ class Agent:
 
         Args:
             provider (Provider): Provider to get runner from
-        
+
         Returns:
             Provider specific runner
         """
