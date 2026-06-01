@@ -13,7 +13,6 @@ nav = [
 
 
 [project.theme]
-#variant = "classic"
 #favicon = "images/favicon.png"
 
 language = "en"
