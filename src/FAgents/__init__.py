@@ -9,13 +9,12 @@ from .message import (
     Developer,
 )
 
-from .messages import Messages, MessagesItem
+from .messages import Messages
 
 from .agents import Agent, tool
 
 __all__ = [
     "Messages",
-    "MessagesItem",
     "Message",
     "ToolCall",
     "ToolCallOutput",
