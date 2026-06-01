@@ -6,12 +6,9 @@ site_author = "sysfab"
 
 #site_url = "https://www.example.com/"
 
-copyright = """
-Copyright &copy; 2026 sysfab
-"""
-
 nav = [
   { "Home" = "index.md" },
+  { "API Reference" = "api-reference.md" },
 ]
 
 
@@ -73,6 +70,11 @@ features = [
 # ----------------------------------------------------------------------------
 #[project.theme.icon]
 #logo = "lucide/smile"
+
+
+copyright = """
+Copyright &copy; 2026 sysfab
+"""
 
 
 [[project.theme.palette]]
