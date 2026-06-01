@@ -18,7 +18,7 @@ class ToolCall:
         name (str): Called function name
         arguments (str): Called function arguments
         status (str): Status of a tool call
-        id (str): 
+        id (str):
         call_id (str | None): Tool call ID
     """
 
@@ -113,21 +113,47 @@ class Message:
 
 
 def _RoleMessage(role: MessageRole):
-    def _message(*content: list[Text | Image | File] | str) -> Message:
-        parts = []
-        for c in content:
-            if isinstance(c, str):
-                parts.append(Text(c))
-            elif isinstance(c, list):
-                parts.extend(c)
-            else:
-                parts.append(c)
-        return Message(role=role, content=parts)
+    def _message(*args, **kwargs) -> Message:
+        return Message(role=role, *args, **kwargs)
 
     return _message
 
 
-User = _RoleMessage("user")
-Assistant = _RoleMessage("assistant")
-System = _RoleMessage("system")
-Developer = _RoleMessage("developer")
+def User(*args, **kwargs) -> Message:
+    """
+    Helper function that outputs Message with the 'user' role
+
+    Returns:
+        (Message): Message from the 'user'
+    """
+    return Message(role="user", *args, **kwargs)
+
+
+def Assistant(*args, **kwargs) -> Message:
+    """
+    Helper function that outputs Message with the 'assistant' role
+
+    Returns:
+        (Message): Message from the 'assistant'
+    """
+    return Message(role="assistant", *args, **kwargs)
+
+
+def System(*args, **kwargs) -> Message:
+    """
+    Helper function that outputs Message with the 'system' role
+
+    Returns:
+        (Message): Message from the 'system'
+    """
+    return Message(role="system", *args, **kwargs)
+
+
+def Developer(*args, **kwargs) -> Message:
+    """
+    Helper function that outputs Message with the 'developer' role
+
+    Returns:
+        (Message): Message from the 'developer'
+    """
+    return Message(role="developer", *args, **kwargs)
