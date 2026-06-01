@@ -1,6 +1,3 @@
-from FAgents import Messages, Agent
-from FAgents.providers import Runner, RunResult, Provider
-
 from openai import AsyncOpenAI
 from openai.types.shared import Reasoning
 
@@ -14,17 +11,18 @@ from agents import (
 from agents import Agent as AgentsAgent
 from agents import Runner as AgentsRunner
 
+from FAgents import Messages, Agent
+from FAgents.providers import Runner, RunResult, Provider
+
 from .utils import (
     to_openai_tool,
     to_openai_input,
     from_openai_input,
 )
 
-
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from typing import Any
     from FAgents import tool
 
 

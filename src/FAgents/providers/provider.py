@@ -1,11 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from typing import Any
     from FAgents import Messages, MessagesItem, Agent, tool
 
 

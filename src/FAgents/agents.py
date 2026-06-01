@@ -2,10 +2,9 @@ from dataclasses import dataclass
 from functools import wraps
 import inspect
 
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, Literal, Any, Protocol
 
 if TYPE_CHECKING:
-    from typing import Literal, Any
     from FAgents.providers import Provider, Runner
 
 

@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from FAgents.message import Message, MessageRole, ToolCall, ToolCallOutput
 
 
