@@ -45,6 +45,20 @@ class Runner(ABC):
 
         Returns:
             Run result
+        
+        Usage:
+            ```py
+            runner = MyAgent.runner(...)
+
+            # In async function:
+            result = await runner.Run(
+                Messages(
+                    User("Hi"!)
+                )
+            )
+
+            print(str(result.Message))
+            ```
         """
         ...
 

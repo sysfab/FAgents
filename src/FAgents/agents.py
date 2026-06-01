@@ -21,6 +21,22 @@ class Agent:
 
     Attributes:
         Tools (list[tool]): Agent's tools
+
+    Usage:
+        ```py
+        from FAgents import Agent, tool
+
+        class MyAgent(Agent):
+            Name = "My Agent"
+            Instructions = "You are helpful assistant"
+            
+            @tool
+            def some_tool(...) -> ...:
+                \"\"\"
+                This tool allows you to do something
+                \"\"\"
+                ...
+        ```
     """
 
     Name: str
@@ -44,5 +60,16 @@ class Agent:
 
         Returns:
             Provider specific runner
+        
+        Usage:
+            ```py
+            from FAgents.providers import OpenAI
+
+            # Define your agent
+
+            runner = MyAgent.runner(
+                provider=OpenAI(model="...", token=...)
+            )
+            ```
         """
         return provider.runner(cls)
