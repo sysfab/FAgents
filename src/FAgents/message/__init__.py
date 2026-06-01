@@ -13,10 +13,17 @@ type MessageRole = Literal["user", "assistant", "system", "developer"]
 class ToolCall:
     """
     Object that represents tool call
+
+    Attributes:
+        name (str): Called function name
+        arguments (str): Called function arguments
+        status (str): Status of a tool call
+        id (str): 
+        call_id (str | None): Tool call ID
     """
 
-    arguments: str
     name: str
+    arguments: str
     status: str
     id: str
     call_id: str | None
@@ -49,7 +56,7 @@ class ToolCallOutput:
 
     Attributes:
         output (Any): Output
-        call_id (str | None): Call ID of an output
+        call_id (str | None): Tool Call ID
     """
 
     output: Any
