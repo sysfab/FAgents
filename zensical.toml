@@ -51,41 +51,21 @@ features = [
     "search.highlight",
 ]
 
-# ----------------------------------------------------------------------------
-# You can configure your own logo to be shown in the header using the "logo"
-# option in the "theme" subsection. The logo must be a relative path to a file
-# in your "docs_dir", e.g., to use `docs/assets/logo.png` you would set:
-# ----------------------------------------------------------------------------
-#logo = "assets/logo.png"
-
-# ----------------------------------------------------------------------------
-# If you don't have a dedicated project logo, you can use a built-in icon from
-# the icon sets shipped in Zensical. Please note that the setting lives in a
-# different subsection, and that the above take precedence over the icon.
-#
-# Read more:
-# - https://zensical.org/docs/setup/logo-and-icons
-# - https://github.com/zensical/ui/tree/master/dist/.icons
-# ----------------------------------------------------------------------------
-#[project.theme.icon]
-#logo = "lucide/smile"
-
-
 copyright = """
 Copyright &copy; 2026 sysfab
 """
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
 
 
 [[project.theme.palette]]
 scheme = "default"
 toggle.icon = "lucide/sun"
 toggle.name = "Switch to dark mode"
-
-
-[[project.theme.palette]]
-scheme = "slate"
-toggle.icon = "lucide/moon"
-toggle.name = "Switch to light mode"
 
 
 #[[project.extra.social]]
