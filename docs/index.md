@@ -1,3 +1,7 @@
+---
+title: Introduction
+---
+
 # Introduction
 FAgents is a python agent orchestration framework built for ease of use and plug-and-play providers (OpenAI, Claude, Google, Deepseek, Local, etc) with one syntax.  
 
