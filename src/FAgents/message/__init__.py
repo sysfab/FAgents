@@ -89,7 +89,7 @@ class Message:
     Attributes:
         content (list[Text | Image | File]): Message contents
         role (MessageRole): Message role
-    
+
     Usage:
         ```py
         Message(
@@ -145,7 +145,7 @@ def User(*args, **kwargs) -> Message:
 
     Returns:
         (Message): Message from the 'user'
-    
+
     Usage:
         ```py
         User(
@@ -163,7 +163,7 @@ def Assistant(*args, **kwargs) -> Message:
 
     Returns:
         (Message): Message from the 'assistant'
-    
+
     Usage:
         ```py
         Assistant("Sorry, i can't help you with that")
@@ -178,7 +178,7 @@ def System(*args, **kwargs) -> Message:
 
     Returns:
         (Message): Message from the 'system'
-    
+
     Usage:
         ```py
         System("You are helpful assistant")
@@ -193,7 +193,7 @@ def Developer(*args, **kwargs) -> Message:
 
     Returns:
         (Message): Message from the 'developer'
-    
+
     Usage:
         ```py
         Developer("Do not answer in text, use `send_message` tool")

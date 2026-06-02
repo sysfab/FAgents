@@ -31,5 +31,5 @@ __all__ = [
     "tool",
     "Provider",
     "Runner",
-    "RunResult"
+    "RunResult",
 ]
