@@ -8,6 +8,11 @@ site_author = "sysfab"
 
 nav = [
   { "Introduction" = "index.md" },
+  { "Tutorials" = [
+    { "Creating/Running agents" = "tutorials/creating-and-running-agents.md" },
+    { "Managing history" = "tutorials/managing-history.md" },
+    { "Message and attachments" = "tutorials/message-and-attachments.md" }
+  ] },
   { "API Reference" = "api-reference.md" },
 ]
 
@@ -68,7 +73,7 @@ toggle.icon = "lucide/sun"
 toggle.name = "Switch to dark mode"
 
 
-#[[project.extra.social]]
+[[project.extra.social]]
 icon = "fontawesome/brands/github"
 link = "https://github.com/sysfab/FAgents"
 
