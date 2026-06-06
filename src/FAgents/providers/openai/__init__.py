@@ -71,20 +71,24 @@ class OpenAI(Provider):
         token (str): Token to use
     """
 
-    def __init__(self, model: str, token: str):
+    def __init__(self, model: str, token: str, base_url: str | None = None, websocket: bool = True):
         self.model = model
         self.token = token
+        self.base_url = base_url
+        self.websocket = websocket
 
         set_default_openai_key(token)
 
         self.openai_client = AsyncOpenAI(
             api_key=self.token,
+            base_url=self.base_url,
+            websocket_base_url=self.base_url,
             default_headers={"Authorization": f"Bearer {self.token}"},
         )
 
         self.openai_provider = OpenAIProvider(
             openai_client=self.openai_client,
-            use_responses_websocket=True,
+            use_responses_websocket=self.websocket,
             responses_websocket_options={
                 "ping_interval": 20.0,
                 "ping_timeout": 60.0,
