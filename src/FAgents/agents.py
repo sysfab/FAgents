@@ -17,7 +17,6 @@ class Agent:
         Name (str): Name of the agent
         Instructions (str): Instructions for the agent
         Reasoning (Literal["none", "minimal", "low", "medium", "high", "xhigh"]): Reasoning mode of an agent
-        Verbosity (Literal["low", "medium", "high"]): Verbosity of an agent
 
     Attributes:
         Tools (list[tool]): Agent's tools
@@ -42,7 +41,6 @@ class Agent:
     Name: str
     Instructions: str = ""
     Reasoning: Literal["none", "minimal", "low", "medium", "high", "xhigh"] = "none"
-    Verbosity: Literal["low", "medium", "high"] = "medium"
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)

@@ -43,7 +43,6 @@ class OpenAIRunner(Runner):
                 model=self.provider.model,
                 model_settings=ModelSettings(
                     reasoning=Reasoning(effort=self.agent.Reasoning),
-                    verbosity=self.agent.Verbosity,
                 ),
             ),
             input=to_openai_input(messages),
@@ -71,7 +70,13 @@ class OpenAI(Provider):
         token (str): Token to use
     """
 
-    def __init__(self, model: str, token: str, base_url: str | None = None, websocket: bool = True):
+    def __init__(
+        self,
+        model: str,
+        token: str,
+        base_url: str | None = None,
+        websocket: bool = True,
+    ):
         self.model = model
         self.token = token
         self.base_url = base_url
